@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Product = require("./models/product.model");
 const app = express();
 const cors = require("cors");
-require('dotenv').config();  
+require('dotenv').config();
 
 app.use(cors());
 app.use(express.json());
@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 
 app.get("/api/product", async (req, res) => {
   try {
-    const products = await Product.find().sort({createdAt:"desc"});
+    const products = await Product.find().sort({ createdAt: "desc" });
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -71,10 +71,13 @@ app.delete("/api/product/:id", async (req, res) => {
 });
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to database"))
-  .catch((err) => console.error("Connection failed!", err));
+  .then(() => {
+    
+    console.log("Connected to database")
+    
+    app.listen(5000, () => {
+      console.log("Server running on port 5000");
+    });
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
-});
- 
+  })
+  .catch((err) => console.error("Connection failed!", err));
